@@ -1,7 +1,10 @@
-# fbapp/config.py
+import os
 
-# Clé secrète pour sécuriser l'application
+# Calcule le chemin absolu du dossier fbapp
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 SECRET_KEY = "#d#JCqTTW\nilK\\7m\x0bp#\tj~#H"
-
-# Identifiant pour l'application Facebook
 FB_APP_ID = 1200420960103822
+
+# Indique le chemin du fichier SQLite app.db
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')

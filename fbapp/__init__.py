@@ -1,4 +1,9 @@
 from flask import Flask
 
-# Importe l'objet 'app' qu'on vient de définir dans views.py
 from .views import app
+from . import models
+
+# Crée la commande 'flask init-db' pour le terminal
+@app.cli.command("init-db")
+def init_db():
+    models.init_db()
