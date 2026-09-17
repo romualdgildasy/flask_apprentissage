@@ -1,7 +1,15 @@
 from flask import Flask
 
 app = Flask(__name__)
+
+# Charge la configuration depuis fbapp/config.py
 app.config.from_object('fbapp.config')
 
-# L'import des vues se fait APPRÈS la création de l'objet app
+from . import models
+
+@app.cli.command("init-db")
+def init_db():
+    models.init_db()
+    print("Base de données initialisée !")
+
 from . import views

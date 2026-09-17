@@ -1,28 +1,57 @@
-from flask import Flask, render_template, url_for
+from flask import render_template, url_for, request
 from . import app
+from .utils import find_content
 
 @app.route('/')
 @app.route('/index/')
 def index():
     description = """
-        Toi, tu n'as pas peur d'être seul ! Les grands espaces et les aventures sont faits pour toi. D'ailleurs, Koh Lanta est ton émission préférée ! Bientôt tu partiras les cheveux au vent sur ton radeau. Tu es aussi un idéaliste chevronné. Quelle chance !
+        Toi, tu n'as pas peur d'être seul ! Les grands espaces et les aventures sont faits pour toi. D'ailleurs, Koh Lanta est ton émission préférée !
     """
+    
+    # 1. Vérifie si une image de résultat spécifique est passée dans l'URL
+    if 'img' in request.args:
+        img = request.args['img']
+        og_url = url_for('index', img=img, _external=True)
+        og_image = url_for('static', filename=img, _external=True)
+    else:
+        og_url = url_for('index', _external=True)
+        og_image = url_for('static', filename='tmp/sample.jpg', _external=True)
+        
+    page_title = "Le test ultime"
+    og_description = "Découvre qui tu es vraiment en faisant le test ultime !"
+
     return render_template(
         'index.html',
-        user_name='Julien',
+        user_name='Julio',
         user_image=url_for('static', filename='img/profile.png'),
         description=description,
-        blur=True
+        blur=True,
+        page_title=page_title,
+        og_url=og_url,
+        og_image=og_image,
+        og_description=og_description
     )
 
 @app.route('/result/')
 def result():
-    description = """
-        Toi, tu n'as pas peur d'être seul ! Les grands espaces et les aventures sont faits pour toi. D'ailleurs, Koh Lanta est ton émission préférée ! Bientôt tu partiras les cheveux au vent sur ton radeau. Tu es aussi un idéaliste chevronné. Quelle chance !
-    """
+    gender = request.args.get('gender', 'male')
+    user_name = request.args.get('first_name', 'Aventurier')
+    uid = request.args.get('id', '')
+
+    profile_pic = f'http://graph.facebook.com/{uid}/picture?type=large'
+    description = find_content(gender).description
+    
+    # Image temporaire pour le partage (en attendant la génération avec Pillow)
+    img = 'tmp/sample.jpg'
+    
+    # URL absolue de redirection pour le bouton de partage Facebook
+    og_url = url_for('index', img=img, _external=True)
+
     return render_template(
         'result.html',
-        user_name='Tom',
-        user_image=url_for('static', filename='img/profile.png'),
-        description=description
+        user_name=user_name,
+        user_image=profile_pic,
+        description=description,
+        og_url=og_url
     )
