@@ -1,9 +1,7 @@
 from flask import Flask
 
-from .views import app
-from . import models
+app = Flask(__name__)
+app.config.from_object('fbapp.config')
 
-# Crée la commande 'flask init-db' pour le terminal
-@app.cli.command("init-db")
-def init_db():
-    models.init_db()
+# L'import des vues se fait APPRÈS la création de l'objet app
+from . import views
