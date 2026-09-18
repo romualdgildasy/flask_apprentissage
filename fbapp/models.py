@@ -1,12 +1,8 @@
 import enum
 import logging as lg
-from flask_sqlalchemy import SQLAlchemy
-from .views import app
+from . import db  # On importe l'instance db déjà créée dans __init__.py
 
-# Création de l'instance SQLAlchemy liée à l'app
-db = SQLAlchemy(app)
-
-#class enum ,# Définition des genres disponibles
+# Définition des genres disponibles
 class Gender(enum.Enum):
     female = 0
     male = 1
@@ -24,7 +20,7 @@ class Content(db.Model):
 def init_db():
     db.drop_all()
     db.create_all()
-    db.session.add(Content("THIS IS SPARTAAAAAAA!!!", Gender['male']))
-    db.session.add(Content("What's your favorite scary movie?", Gender['female']))
+    db.session.add(Content("THIS IS SPARTAAAAAAA!!!", Gender.male))
+    db.session.add(Content("What's your favorite scary movie?", Gender.female))
     db.session.commit()
     lg.warning('Database initialized!')

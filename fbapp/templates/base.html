@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Balises OpenGraph dynamiques -->
+  <meta property="og:title" content="{{ page_title }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ og_url }}" />
+  <meta property="og:image" content="{{ og_image }}" />
+  <meta property="og:description" content="{{ og_description }}" />
+  <meta property="fb:app_id" content="{{ config['FB_APP_ID'] }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
     <title>Open Facebook App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">

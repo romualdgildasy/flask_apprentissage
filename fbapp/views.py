@@ -1,6 +1,6 @@
 from flask import render_template, url_for, request
 from . import app
-from .utils import find_content
+from .utils import find_content, OpenGraphImage
 
 @app.route('/')
 @app.route('/index/')
@@ -20,7 +20,7 @@ def index():
         
     page_title = "Le test ultime"
     og_description = "Découvre qui tu es vraiment en faisant le test ultime !"
-
+    
     return render_template(
         'index.html',
         user_name='Julio',
@@ -37,15 +37,16 @@ def index():
 def result():
     gender = request.args.get('gender', 'male')
     user_name = request.args.get('first_name', 'Aventurier')
-    uid = request.args.get('id', '')
+    uid = request.args.get('id', '123456')
 
     profile_pic = f'http://graph.facebook.com/{uid}/picture?type=large'
     description = find_content(gender).description
     
-    # Image temporaire pour le partage (en attendant la génération avec Pillow)
-    img = 'tmp/sample.jpg'
+    ## Génération et récupération du chemin de la photo dynamique
+    img = OpenGraphImage(uid, user_name, description).location
     
     # URL absolue de redirection pour le bouton de partage Facebook
+    # Construction de l'URL absolue OpenGraph pour la page d'accueil avec le paramètre img
     og_url = url_for('index', img=img, _external=True)
 
     return render_template(
